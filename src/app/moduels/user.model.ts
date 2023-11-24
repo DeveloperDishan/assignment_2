@@ -11,6 +11,7 @@ const userSchema = new Schema<TUser>({
   userId: {
     type: Number,
     unique: true,
+    required: true,
   },
   username: {
     type: String,
