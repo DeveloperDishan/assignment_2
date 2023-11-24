@@ -1,10 +1,10 @@
-export type Order = {
+export type TOrders = {
   productName: string;
   price: number;
   quantity: number;
 };
 // Main
-export type User = {
+export type TUser = {
   userId: number;
   username: string;
   password: string;
@@ -21,5 +21,5 @@ export type User = {
     city: string;
     country: string;
   };
-  orders: Order[];
+  orders: TOrders[];
 };
