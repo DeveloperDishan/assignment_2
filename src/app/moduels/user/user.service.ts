@@ -2,7 +2,7 @@ import { UserModel } from '../user.model';
 import { TUser } from './user.interface';
 
 // create User
-const createUserIntoDB = async (user: TUser) => {
+const createUserIntoDB = async (user: TUser): Promise<TUser> => {
   const result = await UserModel.create(user);
   return result;
 };
@@ -21,8 +21,27 @@ const getSingleUserFromDB = async (id: string) => {
   return result;
 };
 
+const updateUserFromDB = async (
+  id: string,
+  user: TUser,
+): Promise<TUser | null> => {
+  const result = await UserModel.findOneAndUpdate(
+    { userId: id },
+    { $set: user },
+    { new: true },
+  );
+  return result;
+};
+
+const deleteUserfromDB = async (id: string): Promise<TUser | null> => {
+  const result = await UserModel.findOneAndDelete({ userId: id });
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getSingleUserFromDB,
+  updateUserFromDB,
+  deleteUserfromDB,
 };

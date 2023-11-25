@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
+import UserValidationSchema from './validation';
 
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { user: UserData } = req.body;
+    const UserData = req.body;
+
+    // data validation useing Zod
+
+    const zodParsedData = UserValidationSchema.parse(UserData);
     // it will call from service
-    const result = await UserServices.createUserIntoDB(UserData);
+    const result = await UserServices.createUserIntoDB(zodParsedData);
 
     // send response
 
@@ -33,7 +38,7 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-const getSingleStudentFromDB = async (req: Request, res: Response) => {
+const getSingleUserFromDB = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
 
@@ -44,7 +49,7 @@ const getSingleStudentFromDB = async (req: Request, res: Response) => {
         message: 'Users fetched successfully!',
         data: result,
       });
-    } else
+    } else {
       res.status(404).json({
         success: false,
         message: 'User not found',
@@ -53,7 +58,65 @@ const getSingleStudentFromDB = async (req: Request, res: Response) => {
           description: 'User not found!',
         },
       });
+    }
   } catch (err) {
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const UserData = req.body;
+    const userId = req.params.userId;
+    const result = await UserServices.updateUserFromDB(userId, UserData);
+
+    if (result) {
+      res.status(200).json({
+        success: true,
+        message: 'User updated successfully!',
+        data: result,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    await UserServices.deleteUserfromDB(userId);
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+    });
+  } catch (err) {
+    console.log(err);
     res.status(404).json({
       success: false,
       message: 'User not found',
@@ -68,5 +131,7 @@ const getSingleStudentFromDB = async (req: Request, res: Response) => {
 export const UserController = {
   createUser,
   getAllUsers,
-  getSingleStudentFromDB,
+  getSingleUserFromDB,
+  updateUser,
+  deleteUser,
 };
