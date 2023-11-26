@@ -2,9 +2,13 @@ import { UserModel } from '../user.model';
 import { TUser } from './user.interface';
 
 // create User
-const createUserIntoDB = async (userData: TUser): Promise<TUser> => {
+const createUserIntoDB = async (userData: TUser) => {
   const result = await UserModel.create(userData);
-  return result;
+  const sendResult = await UserModel.findOne(
+    { userId: result.userId },
+    { password: false },
+  );
+  return sendResult;
 };
 
 // Get User
@@ -17,19 +21,16 @@ const getAllUserFromDB = async () => {
 // Get single User by id
 
 const getSingleUserFromDB = async (id: number) => {
-  const result = await UserModel.findOne({ userId: id });
+  const result = await UserModel.findOne({ userId: id }, { password: false });
   return result;
 };
 
 // update
-const updateUserFromDB = async (
-  id: number,
-  userData: TUser,
-): Promise<TUser | null> => {
+const updateUserFromDB = async (id: number, userData: TUser) => {
   const result = await UserModel.findOneAndUpdate(
     { userId: id },
     { $set: userData },
-    { new: true },
+    { new: true, projection: { password: 0 } },
   );
   return result;
 };
