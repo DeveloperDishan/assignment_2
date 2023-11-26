@@ -2,8 +2,8 @@ import { UserModel } from '../user.model';
 import { TUser } from './user.interface';
 
 // create User
-const createUserIntoDB = async (user: TUser): Promise<TUser> => {
-  const result = await UserModel.create(user);
+const createUserIntoDB = async (userData: TUser): Promise<TUser> => {
+  const result = await UserModel.create(userData);
   return result;
 };
 
@@ -21,20 +21,31 @@ const getSingleUserFromDB = async (id: string) => {
   return result;
 };
 
+// update
 const updateUserFromDB = async (
   id: string,
-  user: TUser,
+  userData: TUser,
 ): Promise<TUser | null> => {
   const result = await UserModel.findOneAndUpdate(
     { userId: id },
-    { $set: user },
+    { $set: userData },
     { new: true },
   );
   return result;
 };
 
+// delete
 const deleteUserfromDB = async (id: string): Promise<TUser | null> => {
   const result = await UserModel.findOneAndDelete({ userId: id });
+  return result;
+};
+
+const updateOrderFromDB = async (userId: string, userData: TUser) => {
+  const result = await UserModel.findOneAndUpdate(
+    { userId },
+    { $push: { orders: userData } },
+    { new: true },
+  );
   return result;
 };
 
@@ -44,4 +55,5 @@ export const UserServices = {
   getSingleUserFromDB,
   updateUserFromDB,
   deleteUserfromDB,
+  updateOrderFromDB,
 };
