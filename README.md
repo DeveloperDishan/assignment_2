@@ -12,6 +12,10 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+// parser
+app.use(express.json());
+app.use(cors());
+
 app.get('/', (req, res) => {
 res.send('Hello World!')
 })
@@ -21,6 +25,8 @@ console.log(`Example app listening on port ${port}`)
 })
 
 I copy this code express js documentation.
+
+I install cors
 
 I give this command (node {my file location here})
 
