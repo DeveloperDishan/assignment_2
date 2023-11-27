@@ -14,7 +14,7 @@ const createUserIntoDB = async (userData: TUser) => {
 // Get User
 
 const getAllUserFromDB = async () => {
-  const result = await UserModel.find();
+  const result = await UserModel.find({}, { password: 0 });
   return result;
 };
 
