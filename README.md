@@ -30,4 +30,6 @@ I install cors
 
 I give this command (node {my file location here})
 
+Connect my database
+
 after deploy express js help us to run my application localy

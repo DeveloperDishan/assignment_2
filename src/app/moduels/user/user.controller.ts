@@ -21,6 +21,16 @@ const createUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error);
+
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error,
+      // error: {
+      //   code: 404,
+      //   description: 'User not found!',
+      // },
+    });
   }
 };
 
@@ -35,6 +45,16 @@ const getAllUsers = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.log(error);
+
+    res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error,
+      // error: {
+      //   code: 404,
+      //   description: 'User not found!',
+      // },
+    });
   }
 };
 
@@ -77,22 +97,11 @@ const updateUser = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
     const result = await UserServices.updateUserFromDB(userId, UserData);
 
-    if (result) {
-      res.status(200).json({
-        success: true,
-        message: 'User updated successfully!',
-        data: result,
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: result,
+    });
   } catch (err) {
     console.log(err);
     res.status(404).json({
@@ -159,22 +168,12 @@ const getSingleUserOrderFromDB = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
 
     const result = await UserServices.getAllOrdersSingleUser(userId);
-    if (result) {
-      res.status(200).json({
-        success: true,
-        message: 'Users fetched successfully!',
-        data: result[0],
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Users fetched successfully!',
+      data: result[0],
+    });
   } catch (err) {
     res.status(404).json({
       success: false,
@@ -192,22 +191,11 @@ const getOrderTotalPriceFromDB = async (req: Request, res: Response) => {
     const userId = Number(req.params.userId);
 
     const result = await UserServices.getTotalPrice(userId);
-    if (result) {
-      res.status(200).json({
-        success: true,
-        message: 'Total price calculated successfully!',
-        data: result[0],
-      });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: 'User not found',
-        error: {
-          code: 404,
-          description: 'User not found!',
-        },
-      });
-    }
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: result[0],
+    });
   } catch (err) {
     res.status(404).json({
       success: false,
